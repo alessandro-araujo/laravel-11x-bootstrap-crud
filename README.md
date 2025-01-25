@@ -22,7 +22,7 @@ php artisan serve
 ```php
 Route::get('/', [UserController::class, 'index'])->name('user.index');
 ```
-### Rota para criar um recurso
+### Rota para criar um recurso (post)
 ```php
 Route::post('/store-user', [UserController::class, 'store'])->name('user-store');
 ```
@@ -45,16 +45,16 @@ php artisan make:model [nome]
 ```
 
 ## Trabalhando com Views
-### Criar uma View
+### Criar uma View (diretorio/view)
 ```bash
-php artisan make:view users/index
+php artisan make:view [pasta/nome]
 ```
-### Renderizar uma View
+### Retornar uma view personalizada (pasta.arquivo)
 ```php
 return view('users.index');
 ```
 
-## Configurações do Banco de Dados
+## Configurações do Banco de Dados (Regras Migrate!)
 Atualize o arquivo `.env` conforme necessário:
 ```env
 APP_TIMEZONE=America/Sao_Paulo
@@ -68,10 +68,13 @@ DB_DATABASE=laravel
 DB_USERNAME=root
 DB_PASSWORD=
 ```
-Certifique-se de que `APP_KEY` no `.env` não esteja vazio.
+Certifique-se de que `APP_KEY` no `.env.example` esteja vazio!.
+(Fora o APP_KEY, o arquivo .env deve estar totalmente igual ao .env.example)
+Para hospedagens reais, alterar: APP_ENV=local
+
 
 ### Executar as migrations
-Após configurar o banco, execute:
+* Após configurar o banco, execute (CASO QUEIRA USAR O BD JÀ INTEGRADO NO LARAVEL) - (NÂO RECOMENDADO EM PROJETOS REAIS):
 ```bash
 php artisan migrate
 ```
@@ -88,33 +91,56 @@ php artisan migrate
 
 ## Validações
 ### Criar uma Request para validação
+* Criando arquivo de validação: UserRequest
 ```bash
 php artisan make:request UserRequest
 ```
 ### Exemplo de validações
 ```php
+public function authorize(): bool
+{
+    return true;
+}
+
+/**
+ * Get the validation rules that apply to the request.
+ *
+ * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+ */
 public function rules(): array
 {
+    // pegar dados da URL
+    $userId = $this->route('user');
+
     return [
         'name' => 'required',
-        'email' => 'required|email',
-        'password' => 'required|min:6'
+        'email' => 'required|email|unique:users,email,' . ($userId ? $userId->id : null),
+        'password' => 'required|min:6',
     ];
 }
 
 public function messages(): array
 {
     return [
-        'name.required' => 'Campo nome é obrigatório',
-        'email.required' => 'Campo e-mail é obrigatório',
-        'email.email' => 'O campo deve ser um e-mail válido!',
-        'password.required' => 'Campo senha é obrigatório',
-        'password.min' => 'Senha deve ter no mínimo :min caracteres!'
+        'name.required' => 'Campo nome é obrigatorio',
+        'email.required' => 'Campo e-mail é obrigatorio',
+        'email.email' => 'Campo deve ser um email valido!',
+        'email.unique' => 'O e-mail já está cadastrado!',
+        'password.required' => 'Campo senha é obrigatorio',
+        'password.min' => 'Senha com no minimo :min caracteres!',
     ];
 }
 ```
 ### Exibir mensagens de erro na View
-```html
+* Use o valor que vc predefiniu na function with()
+```php
+@if (session('success'))
+    <p>
+        {{ session('success') }}
+    </p>
+@endif
+```  
+```php
 @if($errors->any())
     @foreach ($errors->all() as $error)
         <p style="color: red">{{ $error }}</p>
@@ -122,15 +148,22 @@ public function messages(): array
 @endif
 ```
 
+### Manter dados do formulario apos o f5
+o valor do old é o name do input
+```html
+value="{{ old('name') }}"
+```  
+
 ## Trabalhando com dados do banco
 ### Listar dados do banco
+* Como no exemplo vamos importar a model (User) e dela o orderByDesc get(), assim recuperando todos os dados
 Controller:
 ```php
 $users = User::orderByDesc('id')->get();
 return view('users.index', ['users' => $users]);
 ```
 View:
-```html
+```php
 @forelse ($users as $user)
     ID: {{ $user->id }}<br>
     Nome: {{ $user->name }}<br>
@@ -161,12 +194,6 @@ public function store(UserRequest $request)
     return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso!');
 }
 ```
-View para exibir mensagem de sucesso:
-```html
-@if (session('success'))
-    <p>{{ session('success') }}</p>
-@endif
-```
 
 ## Formatação de datas
 Para formatar datas, use a biblioteca `Carbon`:
@@ -180,7 +207,7 @@ Para formatar datas, use a biblioteca `Carbon`:
 Route::put('/update-user/{user}', [UserController::class, 'update'])->name('user-update');
 Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
 ```
-### Formulário para deletar um registro
+### Formulário para deletar um registro usando parametros dentro da rota
 ```html
 <form method="POST" action="{{ route('user.destroy', ['user' => $user->id]) }}" class="d-inline">
     @csrf
@@ -189,8 +216,25 @@ Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name(
 </form>
 ```
 
+# Uso do var_drump 
+```php
+{{ dd($array) }}
+```
+
+# Explicação do Namespace das rotas (name())
+* Quando chamamos o metodo name usaramos ele no route('user.destroy') na view para poder acessar a rota
+```php
+->name('user.destroy');
+```
+
+# Capturar um dado de um laço e passar para um href utilizando rotas com paremetros
+* Esse exemplo é uma rota passando com parametros
+```html
+<a href="{{ route('user.show', ['user' => $user->id]) }}"> Visualizar</a><br><hr>
+```
+
 ## Integrando Bootstrap
-### Instalar dependências
+### Instalar dependências (Faça na ordem!)
 ```bash
 npm install
 npm i --save bootstrap @popperjs/core
@@ -219,13 +263,19 @@ npm run dev
 ## Trabalhando com Layouts e Componentes
 ### Criar um layout
 No diretório `resources/view/layouts`, crie `admin.blade.php`:
+No arquivo `admin.blade.php` crie seu corpo e importe o Bootstrap:
+```html
+@vite(['resources/sass/app.scss', 'resources/js/app.js'])
+```
+`admin.blade.php` Na admn o local onde o content sera adicionado:
 ```html
 <div class="container">
     @yield('content')
 </div>
 ```
+
 ### Usar o layout
-Na View:
+Na View criando o content (para usar no `@yield` da página `admin.blade.php`):
 ```html
 @extends('layouts.admin')
 @section('content')
@@ -234,9 +284,9 @@ Na View:
 ```
 ### Criar um componente
 ```bash
-php artisan make:component alert --view
+php artisan make:component nome-componente --view
 ```
-Usar o componente na View:
+Usar o componente na View (<x-nome-componente />):
 ```html
 <x-alert />
 ```

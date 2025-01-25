@@ -5,6 +5,14 @@
 - **Composer**
 - **Node.js** 20 ou superior
 
+### Para apenas usar o projeto.
+
+- **Configure o arquivo .env e .env-example com os dados do seu local configurado**
+- **Execute o comando: php artisan migrate**
+- **Execute o php: php artisan serve**
+- **Ligar a interface do bootstrap: npm run dev**
+- **Acesse: [php artisan serve](http://127.0.0.1:8000/)**
+
 ## Como criar o projeto
 No terminal, execute:
 ```bash

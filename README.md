@@ -1,18 +1,15 @@
 # Laravel (Create, Read, Update, Delete, Login, API Route) <img src="https://github.com/user-attachments/assets/e4b7a64d-8302-495b-b44d-93d9d0f4b2a4" width="55" height="35" />  <img src="https://github.com/user-attachments/assets/958dab41-1a1f-4f53-afef-43e2d5a6740c" width="40" height="40" />
 
-
-
-
-
-
 ## ➡️ Requisitos
 - **PHP** 8.2 ou superior
 - **Composer** 2.8.5 ou superior
 - **Node.js** 20 ou superior
 - **phpMyAdmin** 5.2.1 ou superior
 
+
+
 ## ➡️ Usando o projeto pela primeira vez.
-- **[Configurando .env](#configurando-banco-de-dados) o arquivo .env e .env-example**
+- **[Configurando .env](##%EF%B8%8F-configura%C3%A7%C3%B5es-do-banco-de-dados-regras-migrate) o arquivo .env e .env-example**
 - **Execute o comando:**
 ```shell
 php artisan migrate
@@ -38,7 +35,6 @@ Execute o comando:
 ```bash
 php artisan serve
 ```
-# configurando banco de dados
 
 ## Configuração de rotas
 ### Rota para exibir uma view
@@ -77,7 +73,7 @@ php artisan make:view [pasta/nome]
 return view('users.index');
 ```
 
-## Configurações do Banco de Dados (Regras Migrate!)
+## ➡️ Configurações do Banco de Dados (Regras Migrate!)
 Atualize o arquivo `.env` conforme necessário:
 ```env
 APP_TIMEZONE=America/Sao_Paulo

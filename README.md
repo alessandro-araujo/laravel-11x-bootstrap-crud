@@ -1,14 +1,18 @@
-# Laravel (Create, Read, Update, Delete, Login, API Route) 🚀  <img src="https://github.com/user-attachments/assets/958dab41-1a1f-4f53-afef-43e2d5a6740c" width="20" height="20" />
+# Laravel (Create, Read, Update, Delete, Login, API Route) <img src="https://github.com/user-attachments/assets/e4b7a64d-8302-495b-b44d-93d9d0f4b2a4" width="55" height="35" />  <img src="https://github.com/user-attachments/assets/958dab41-1a1f-4f53-afef-43e2d5a6740c" width="40" height="40" />
+
+
+
 
 
 
 ## ➡️ Requisitos
 - **PHP** 8.2 ou superior
-- **Composer**
+- **Composer** 2.8.5 ou superior
 - **Node.js** 20 ou superior
+- **phpMyAdmin** 5.2.1 ou superior
 
-## ➡️ Usar o projeto pela primeira vez.
-- **Configure o arquivo .env e .env-example com os dados do seu local configurado**
+## ➡️ Usando o projeto pela primeira vez.
+- **[Configurando .env](##configurações-do-banco-de-dados-regras-migrate) o arquivo .env e .env-example**
 - **Execute o comando:**
 ```shell
 php artisan migrate
@@ -309,3 +313,4 @@ Usar o componente na View (<x-nome-componente />):
 <x-alert />
 ```
 
+#laravel #api #php #mvc #crud #poo

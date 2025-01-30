@@ -1,4 +1,4 @@
-# Laravel (Create, Read, Update, Delete, Login, API Route) <img src="https://github.com/user-attachments/assets/e4b7a64d-8302-495b-b44d-93d9d0f4b2a4" width="55" height="35" />  <img src="https://github.com/user-attachments/assets/958dab41-1a1f-4f53-afef-43e2d5a6740c" width="40" height="40" />
+# Laravel (Create, Read, Update, Delete, Middleware Login, API Route) <img src="https://github.com/user-attachments/assets/e4b7a64d-8302-495b-b44d-93d9d0f4b2a4" width="55" height="35" />  <img src="https://github.com/user-attachments/assets/958dab41-1a1f-4f53-afef-43e2d5a6740c" width="40" height="40" />
 
 ## ➡️ Requisitos
 - **PHP** 8.2 ou superior
@@ -26,81 +26,142 @@ npm i --save bootstrap @popperjs/core
 npm i --save-dev sass
 ```
 
-Vamos importar Bootstrap no projeto.
+Vamos importar o **Bootstrap** no projeto.
 
 **No arquivo** `resources/js/bootstrap.js`:
 ```js
 import 'bootstrap';
 ```
 
-### Criar arquivo de estilo
-No diretório `resources/sass`, crie o arquivo `app.scss`:
+Configurando arquivo de estilo **app.scss**
+**No diretório** `resources/sass/`, crie o arquivo `app.scss`:
 ```scss
 @import 'bootstrap/scss/bootstrap';
 ```
-### Configurar o Vite
-No arquivo `vite.config.js`:
+
+Configurando o **Bootstrap Vite**
+**No arquivo** `vite.config.js`:
 ```js
 input: ['resources/sass/app.scss', 'resources/js/app.js'],
 ```
-### Executar as bibliotecas
-```bash
-npm run dev
-```
 
-
-
-
-
-- **Ligar a interface do bootstrap:**
+**Executando a interface do Bootstrap**
 ```shell
 npm run dev
 ```
+
 - **Acesse: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
 
 
 ## ➡️ Criando o Projeto do zero.
 Crie o projeto usando o composer:
-```bash
+```shell
 composer create-project laravel/laravel .
 ```
 
 ## ➡️ Trabalhando com Rotas.
-### Rota para exibir uma view
+- Vamos começar com rotas **web**
+* Rota para exibir uma **view**
+
 ```php
 Route::get('/', [UserController::class, 'index'])->name('user.index');
 ```
-### Rota para criar um recurso (post)
+
+# Explicação do Namespace das rotas (name())
+* O método **route('user.index') na view** vai acessar a rota com o método **name()**
+```php
+->name('user.index');
+```
+
+* Rota para criar um recurso **(post)**
 ```php
 Route::post('/store-user', [UserController::class, 'store'])->name('user-store');
 ```
-### Obter um registro específico
-Rota:
+
+* Obter um registro específico usando **Parâmetros**
 ```php
 Route::get('/show-user/{user}', [UserController::class, 'show'])->name('user.show');
 ```
 
-
-## Criando uma Controller
-Para criar uma nova controller, utilize:
-```bash
-php artisan make:controller [nome]
+## ➡️ Criando arquivos para o projeto.
+* Criando uma **Controller**
+```shell
+php artisan make:controller [NomeController]
 ```
-### Namespace para controllers
-Certifique-se de importar a controller:
+* Criando uma **Model**
+```shell
+php artisan make:model [NomeModel]
+```
+* Criando uma **Migration**
+```shell
+php artisan make:migration [nome_da_migration]
+```
+* Criando um **Seeder**
+```shell
+php artisan make:seeder [NomeSeeder]
+```
+* Criando uma **Factory**
+```shell
+php artisan make:factory [NomeFactory]
+```
+* Criando um **Middleware**
+```shell
+php artisan make:middleware [NomeMiddleware]
+```
+* Criando uma **Request**
+```shell
+php artisan make:request [NomeRequest]
+```
+* Criando um **Event**
+```shell
+php artisan make:event [NomeEvent]
+```
+* Criando um **Listener**
+```shell
+php artisan make:listener [NomeListener]
+```
+* Criando um **Job**
+```shell
+php artisan make:job [NomeJob]
+```
+* Criando um **Command**
+```shell
+php artisan make:command [NomeCommand]
+```
+* Criando um **Observer**
+```shell
+php artisan make:observer [NomeObserver] --model=[NomeModel]
+```
+* Criando um **Policy**
+```shell
+php artisan make:policy [NomePolicy]
+```
+* Criando um **Resource**
+```shell
+php artisan make:resource [NomeResource]
+```
+* Criando um **Rule**
+```shell
+php artisan make:rule [NomeRule]
+```
+* Criando um **Test (Unitário)**
+```shell
+php artisan make:test [NomeTest]
+```
+* Criando um **Test (Feature)**
+```shell
+php artisan make:test [NomeTest] --unit
+```
+
+### Namespace para Controllers
+* Certifique-se de importar a **Controller**:
 ```php
 use App\Http\Controllers\UserController;
 ```
 
-## Trabalhando com Models
-### Criar um Model
-```bash
-php artisan make:model [nome]
-```
-
-## Trabalhando com Views
-### Criar uma View (diretorio/view)
-```bash
+## ➡️ Trabalhando com Views.
+* Criar uma **View** com diretório (**diretorio/view**):
+```shell
 php artisan make:view [pasta/nome]
 ```
 ### Retornar uma view personalizada (pasta.arquivo)
@@ -282,11 +343,7 @@ Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name(
 {{ dd($array) }}
 ```
 
-# Explicação do Namespace das rotas (name())
-* Quando chamamos o metodo name usaramos ele no route('user.destroy') na view para poder acessar a rota
-```php
-->name('user.destroy');
-```
+
 
 
 ## Trabalhando com Layouts e Componentes

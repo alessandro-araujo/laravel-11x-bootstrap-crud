@@ -22,18 +22,13 @@ php artisan serve
 ```shell
 npm run dev
 ```
-- **Acesse: [php artisan serve](http://127.0.0.1:8000/)**
+- **Acesse: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
 
-## Como criar o projeto
-No terminal, execute:
+
+## ➡️ Criando o Projeto do zero.
+Crie o projeto usando o composer:
 ```bash
 composer create-project laravel/laravel .
-```
-
-## Iniciar o servidor
-Execute o comando:
-```bash
-php artisan serve
 ```
 
 ## Configuração de rotas
@@ -45,6 +40,12 @@ Route::get('/', [UserController::class, 'index'])->name('user.index');
 ```php
 Route::post('/store-user', [UserController::class, 'store'])->name('user-store');
 ```
+### Obter um registro específico
+Rota:
+```php
+Route::get('/show-user/{user}', [UserController::class, 'show'])->name('user.show');
+```
+
 
 ## Criando uma Controller
 Para criar uma nova controller, utilize:
@@ -73,6 +74,54 @@ php artisan make:view [pasta/nome]
 return view('users.index');
 ```
 
+## Links e formulários
+### Criar um link para uma rota
+```html
+<a href="{{ route('user.create') }}">Create</a>
+```
+### Formulário para envio de dados
+```html
+<form action="{{ route('user-store') }}" method="POST">
+```
+### Manter dados do formulario apos o f5
+o valor do old é o name do input
+```html
+value="{{ old('name') }}"
+```  
+### Exibir mensagens de erro na View
+* Use o valor que vc predefiniu na function with()
+```php
+@if (session('success'))
+    <p>
+        {{ session('success') }}
+    </p>
+@endif
+```  
+```php
+@if($errors->any())
+    @foreach ($errors->all() as $error)
+        <p style="color: red">{{ $error }}</p>
+    @endforeach
+@endif
+```
+### Formulário para deletar um registro usando parametros dentro da rota
+```html
+<form method="POST" action="{{ route('user.destroy', ['user' => $user->id]) }}" class="d-inline">
+    @csrf
+    @method('delete')
+    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja apagar este registro?')">Apagar</button>
+</form>
+```
+
+
+# Capturar um dado de um laço e passar para um href utilizando rotas com paremetros
+* Esse exemplo é uma rota passando com parametros
+```html
+<a href="{{ route('user.show', ['user' => $user->id]) }}"> Visualizar</a><br><hr>
+```
+
+
+
 ## ➡️ Configurações do Banco de Dados (Regras Migrate!)
 Atualize o arquivo `.env` conforme necessário:
 ```env
@@ -98,15 +147,6 @@ Para hospedagens reais, alterar: APP_ENV=local
 php artisan migrate
 ```
 
-## Links e formulários
-### Criar um link para uma rota
-```html
-<a href="{{ route('user.create') }}">Create</a>
-```
-### Formulário para envio de dados
-```html
-<form action="{{ route('user-store') }}" method="POST">
-```
 
 ## Validações
 ### Criar uma Request para validação
@@ -150,28 +190,8 @@ public function messages(): array
     ];
 }
 ```
-### Exibir mensagens de erro na View
-* Use o valor que vc predefiniu na function with()
-```php
-@if (session('success'))
-    <p>
-        {{ session('success') }}
-    </p>
-@endif
-```  
-```php
-@if($errors->any())
-    @foreach ($errors->all() as $error)
-        <p style="color: red">{{ $error }}</p>
-    @endforeach
-@endif
-```
 
-### Manter dados do formulario apos o f5
-o valor do old é o name do input
-```html
-value="{{ old('name') }}"
-```  
+
 
 ## Trabalhando com dados do banco
 ### Listar dados do banco
@@ -190,11 +210,6 @@ View:
 @empty
     <p>Sem registros encontrados.</p>
 @endforelse
-```
-### Obter um registro específico
-Rota:
-```php
-Route::get('/show-user/{user}', [UserController::class, 'show'])->name('user.show');
 ```
 
 ## Exemplo de criação, validação e redirecionamento
@@ -226,14 +241,7 @@ Para formatar datas, use a biblioteca `Carbon`:
 Route::put('/update-user/{user}', [UserController::class, 'update'])->name('user-update');
 Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
 ```
-### Formulário para deletar um registro usando parametros dentro da rota
-```html
-<form method="POST" action="{{ route('user.destroy', ['user' => $user->id]) }}" class="d-inline">
-    @csrf
-    @method('delete')
-    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja apagar este registro?')">Apagar</button>
-</form>
-```
+
 
 # Uso do var_drump 
 ```php
@@ -246,11 +254,6 @@ Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name(
 ->name('user.destroy');
 ```
 
-# Capturar um dado de um laço e passar para um href utilizando rotas com paremetros
-* Esse exemplo é uma rota passando com parametros
-```html
-<a href="{{ route('user.show', ['user' => $user->id]) }}"> Visualizar</a><br><hr>
-```
 
 ## Integrando Bootstrap
 ### Instalar dependências (Faça na ordem!)

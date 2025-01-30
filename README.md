@@ -1,5 +1,4 @@
-# Laravel (Create, Read, Update, Delete, Login, API Route) 🚀  
-<img src="https://github.com/user-attachments/assets/958dab41-1a1f-4f53-afef-43e2d5a6740c" width="20" height="20" />
+# Laravel (Create, Read, Update, Delete, Login, API Route) 🚀  <img src="https://github.com/user-attachments/assets/958dab41-1a1f-4f53-afef-43e2d5a6740c" width="20" height="20" />
 
 
 

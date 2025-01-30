@@ -28,7 +28,7 @@
                 </ul>
 
                 <div class="text-end">
-                    <button type="button" class="btn btn-outline-light me-2">Login</button>
+                    <a class="btn btn-outline-light me-2" href="{{ route('login.destroy') }}">Sair</a>
                 </div>
             </div>
         </div>

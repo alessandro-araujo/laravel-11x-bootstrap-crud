@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 
 class UserController extends Controller
 {
@@ -59,16 +60,19 @@ class UserController extends Controller
     {
         // Validar o formulário
         $request->validated();
-        
-        // Cadastrar o usuário no BD
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password,
-        ]);
+        try {
+            // Cadastrar o usuário no BD
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => $request->password,
+            ]);
 
-        // Redirecionar o usuário, enviar a mensagem de sucesso
-        return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso!');
+            // Redirecionar o usuário, enviar a mensagem de sucesso
+            return redirect()->route('user.index')->with('success', 'Usuário cadastrado com sucesso!');
+        } catch (QueryException $e) {
+            return redirect()->back()->with('error', 'Erro ao cadastrar usuário. Tente novamente.');
+        }
     }
     
 }

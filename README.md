@@ -173,6 +173,10 @@ php artisan make:view [pasta/nome]
 ```php
 return view('users.index');
 ```
+### Usando uma **imagem** <img>:
+```html
+<img class="mb-4" src="{{ asset('images/nome.png')}}" alt="" width="72" height="72" >
+```
 
 ## Utilizando **Links** e **Formulários**.
 * Criar um **link** para uma **rota** use o **namespace** de rotas
@@ -367,6 +371,31 @@ Usar o componente na View (<x-nome-componente />):
 ```html
 <x-alert />
 ```
+
+### 1. Instalar o Bootstrap Icons via NPM
+Primeiro, instale o pacote `bootstrap-icons` no seu projeto. Abra o terminal no diretório do seu projeto e execute:
+
+```bash
+npm install bootstrap-icons
+```
+
+### 2. Importar o Bootstrap Icons no seu arquivo `app.scss` ou `app.js`
+Após a instalação, você precisa importar o CSS do Bootstrap Icons no seu arquivo `app.scss` ou `app.js`.
+
+#### No `app.scss`:
+Abra `resources/sass/app.scss` e adicione a seguinte linha para importar o Bootstrap Icons:
+
+```scss
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+```
+
+#### Ou no `app.js`:
+Se preferir importar no `app.js`, adicione a seguinte linha no início do arquivo `resources/js/app.js`:
+
+```javascript
+import 'bootstrap-icons/font/bootstrap-icons.css';
+```
+
 
 
 #laravel #api #php #mvc #crud #poo

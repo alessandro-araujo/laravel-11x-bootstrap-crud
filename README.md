@@ -7,17 +7,51 @@
 - **phpMyAdmin** 5.2.1 ou superior
 
 
-
 ## ➡️ Usando o projeto pela primeira vez.
-- **[Configurando .env](#%EF%B8%8F-configura%C3%A7%C3%B5es-do-banco-de-dados-regras-migrate) o arquivo .env e .env-example**
+- **[Configurando .env](#%EF%B8%8F-configura%C3%A7%C3%B5es-do-banco-de-dados-regras-migrate) Crie o arquivo .env de .env-example**
 - **Execute o comando:**
 ```shell
 php artisan migrate
 ```
 - **Execute o php:**
- ```shell
+```shell
 php artisan serve
 ```
+
+## ➡️ Instalando Bootstrap (**Faça na Ordem!**).
+Usando o comando **npm** vamos instalar as dependências.
+```shell
+npm install
+npm i --save bootstrap @popperjs/core
+npm i --save-dev sass
+```
+
+Vamos importar Bootstrap no projeto.
+
+**No arquivo** `resources/js/bootstrap.js`:
+```js
+import 'bootstrap';
+```
+
+### Criar arquivo de estilo
+No diretório `resources/sass`, crie o arquivo `app.scss`:
+```scss
+@import 'bootstrap/scss/bootstrap';
+```
+### Configurar o Vite
+No arquivo `vite.config.js`:
+```js
+input: ['resources/sass/app.scss', 'resources/js/app.js'],
+```
+### Executar as bibliotecas
+```bash
+npm run dev
+```
+
+
+
+
+
 - **Ligar a interface do bootstrap:**
 ```shell
 npm run dev
@@ -31,7 +65,7 @@ Crie o projeto usando o composer:
 composer create-project laravel/laravel .
 ```
 
-## Configuração de rotas
+## ➡️ Trabalhando com Rotas.
 ### Rota para exibir uma view
 ```php
 Route::get('/', [UserController::class, 'index'])->name('user.index');
@@ -255,33 +289,6 @@ Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name(
 ```
 
 
-## Integrando Bootstrap
-### Instalar dependências (Faça na ordem!)
-```bash
-npm install
-npm i --save bootstrap @popperjs/core
-npm i --save-dev sass
-```
-### Importar Bootstrap
-No arquivo `resources/js/bootstrap.js`:
-```js
-import 'bootstrap';
-```
-### Criar arquivo de estilo
-No diretório `resources/sass`, crie o arquivo `app.scss`:
-```scss
-@import 'bootstrap/scss/bootstrap';
-```
-### Configurar o Vite
-No arquivo `vite.config.js`:
-```js
-input: ['resources/sass/app.scss', 'resources/js/app.js'],
-```
-### Executar as bibliotecas
-```bash
-npm run dev
-```
-
 ## Trabalhando com Layouts e Componentes
 ### Criar um layout
 No diretório `resources/view/layouts`, crie `admin.blade.php`:
@@ -312,5 +319,6 @@ Usar o componente na View (<x-nome-componente />):
 ```html
 <x-alert />
 ```
+
 
 #laravel #api #php #mvc #crud #poo

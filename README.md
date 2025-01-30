@@ -12,7 +12,7 @@
 - **phpMyAdmin** 5.2.1 ou superior
 
 ## ➡️ Usando o projeto pela primeira vez.
-- **[Configurando .env](##configurações-do-banco-de-dados-regras-migrate) o arquivo .env e .env-example**
+- **[Configurando .env](#configurando-banco-de-dados) o arquivo .env e .env-example**
 - **Execute o comando:**
 ```shell
 php artisan migrate
@@ -38,6 +38,7 @@ Execute o comando:
 ```bash
 php artisan serve
 ```
+# configurando banco de dados
 
 ## Configuração de rotas
 ### Rota para exibir uma view

@@ -1,23 +1,23 @@
-# CRUD-LARAVEL-ANTI-CSRF
+# Laravel (Create, Read, Update, Delete, Login, API Route) 🚀 ![laravel](https://github.com/user-attachments/assets/958dab41-1a1f-4f53-afef-43e2d5a6740c)
 
-## Requisitos
+
+## ➡️ Requisitos
 - **PHP** 8.2 ou superior
 - **Composer**
 - **Node.js** 20 ou superior
 
-### Para apenas usar o projeto.
-
+## ➡️ Usar o projeto pela primeira vez.
 - **Configure o arquivo .env e .env-example com os dados do seu local configurado**
 - **Execute o comando:**
-```bash
+```shell
 php artisan migrate
 ```
 - **Execute o php:**
- ```bash
+ ```shell
 php artisan serve
 ```
 - **Ligar a interface do bootstrap:**
-```bash
+```shell
 npm run dev
 ```
 - **Acesse: [php artisan serve](http://127.0.0.1:8000/)**

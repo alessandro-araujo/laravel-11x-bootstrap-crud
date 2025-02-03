@@ -21,7 +21,8 @@ APP_KEY=base64:bXJ067MEjGzKDDnZe61YHAGsYbqDQTcHTDxn+DGpOPw=
 ```shell
 composer install
 ```
-- **Execute o comando:**
+- **Executar as migrations**
+* Após configurar o banco, execute (**CASO QUEIRA USAR O BD JÀ INTEGRADO NO LARAVEL**) - (**NÂO RECOMENDADO EM PROJETOS REAIS**):
 ```shell
 php artisan migrate
 ```
@@ -422,12 +423,6 @@ Certifique-se de que `APP_KEY` no `.env.example` esteja vazio!.
 (**Fora o APP_KEY, o arquivo .env deve estar totalmente igual ao .env.example**)
 Para hospedagens reais, alterar: **APP_ENV=local**
 
-
-### Executar as migrations
-* Após configurar o banco, execute (**CASO QUEIRA USAR O BD JÀ INTEGRADO NO LARAVEL**) - (**NÂO RECOMENDADO EM PROJETOS REAIS**):
-```bash
-php artisan migrate
-```
 ## ➡️ Trabalhando com dados do banco
 ### Listar dados do banco
 * Como no exemplo vamos importar a **model (User)** e **orderByDesc get()**, assim recuperando todos os dados

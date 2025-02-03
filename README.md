@@ -9,6 +9,9 @@
 
 ## ➡️ Usando o projeto pela **primeira vez**.
 - **[Configurando .env](#%EF%B8%8F-configura%C3%A7%C3%B5es-do-banco-de-dados-regras-migrate) Crie o arquivo .env de .env-example**
+```env
+APP_KEY=base64:bXJ067MEjGzKDDnZe61YHAGsYbqDQTcHTDxn+DGpOPw=
+```
 - **Instale as depêndencias:**
 ```shell
 composer install

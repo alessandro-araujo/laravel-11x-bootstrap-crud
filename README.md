@@ -423,6 +423,8 @@ Certifique-se de que `APP_KEY` no `.env.example` esteja vazio!.
 (**Fora o APP_KEY, o arquivo .env deve estar totalmente igual ao .env.example**)
 Para hospedagens reais, alterar: **APP_ENV=local**
 
+- **[Usando o projeto pela primeira vez](#%EF%B8%8F-usando-o-projeto-pela-primeira-vez)**.
+  
 ## ➡️ Trabalhando com dados do banco
 ### Listar dados do banco
 * Como no exemplo vamos importar a **model (User)** e **orderByDesc get()**, assim recuperando todos os dados

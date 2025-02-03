@@ -32,14 +32,7 @@ php artisan db:seed
 ```
 - **[Configurando o Bootstrap](#%EF%B8%8F-instalando-bootstrap-fa%C3%A7a-na-ordem) Execute todos os comandos na ordem**
 Se não **Configurar o Bootstrap** o projeto **não vai funcionar**.
-
-- **Execute o php:**
-```shell
-php artisan serve
-```
-- **Acesse: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
-
-## ➡️ Instalando Bootstrap (**Faça na Ordem!**).
+- Instalando Bootstrap (**Faça na Ordem!**).
 * Usando o comando **npm** vamos instalar as dependências.
 ```shell
 npm install
@@ -54,6 +47,12 @@ npm i --save-dev sass
 ```shell
 npm run dev
 ```
+- **Execute o php:**
+```shell
+php artisan serve
+```
+- **Acesse: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
+
 
 
 ## ➡️ Aprendendo a importar o **Bootstrap** no projeto.

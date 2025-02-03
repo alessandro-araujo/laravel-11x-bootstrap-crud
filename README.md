@@ -24,10 +24,15 @@ php artisan migrate
 ```shell
 php artisan db:seed
 ```
+**Executando a interface do Bootstrap**
+```shell
+npm run dev
+```
 - **Execute o php:**
 ```shell
 php artisan serve
 ```
+- **Acesse: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
 
 ## ➡️ Instalando Bootstrap (**Faça na Ordem!**).
 * Usando o comando **npm** vamos instalar as dependências.
@@ -55,14 +60,6 @@ import 'bootstrap';
 ```js
 input: ['resources/sass/app.scss', 'resources/js/app.js'],
 ```
-
-**Executando a interface do Bootstrap**
-```shell
-npm run dev
-```
-
-- **Acesse: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
-
 
 ## ➡️ Criando o Projeto do **zero**.
 Crie o projeto usando o composer:

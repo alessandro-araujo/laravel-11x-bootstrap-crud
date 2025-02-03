@@ -9,6 +9,10 @@
 
 ## ➡️ Usando o projeto pela **primeira vez**.
 - **[Configurando .env](#%EF%B8%8F-configura%C3%A7%C3%B5es-do-banco-de-dados-regras-migrate) Crie o arquivo .env de .env-example**
+- **Instale as depêndencias:**
+```shell
+composer install
+```
 - **Execute o comando:**
 ```shell
 php artisan migrate

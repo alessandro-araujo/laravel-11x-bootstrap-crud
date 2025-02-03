@@ -56,7 +56,7 @@ npm run dev
 ```
 
 
-* Aprendendo a importar o **Bootstrap** no projeto.
+## ➡️ Aprendendo a importar o **Bootstrap** no projeto.
 
 **No arquivo** `resources/js/bootstrap.js`:
 ```js

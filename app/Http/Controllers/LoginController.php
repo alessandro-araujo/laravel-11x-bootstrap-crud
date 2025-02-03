@@ -6,6 +6,7 @@ use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\RateLimiter;
 
 class LoginController extends Controller
 {
@@ -42,6 +43,12 @@ class LoginController extends Controller
         // Validar o formulário
         $request->validated();
 
+        // Proteção contra tentativas excessivas
+        $key = 'login-attempts:' . $request->ip();
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            return back()->with('error', 'Muitas tentativas de login. Tente novamente mais tarde.');
+        }
+
         // Validar usuário e senha no banco de dados    
         $authenticated = Auth::attempt(['email' => $request->email, 'password' => $request->password]);
 
@@ -51,9 +58,11 @@ class LoginController extends Controller
         }
 
         // Obter usuário autenticado
-        $user = Auth::user();
-        $user = User::find($user->id);
-
+        // $user = Auth::user();
+        // $user = User::find($user->id);
+        
+        // Regeneração da sessão para segurança
+        $request->session()->regenerate();
         // Direcionar para o dashboard
         return redirect()->route('user.index');
     }
@@ -61,6 +70,8 @@ class LoginController extends Controller
     {
         // Destruindo a SESSION 
         Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
         return redirect()->route('login')->with('success', 'Deslogado com sucesso!');
     }
 }

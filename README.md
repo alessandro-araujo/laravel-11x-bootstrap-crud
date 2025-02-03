@@ -1,4 +1,4 @@
-# Laravel (Create, Read, Update, Delete, Middleware Login, API Route) <img src="https://github.com/user-attachments/assets/e4b7a64d-8302-495b-b44d-93d9d0f4b2a4" width="55" height="35" />  <img src="https://github.com/user-attachments/assets/958dab41-1a1f-4f53-afef-43e2d5a6740c" width="40" height="40" />
+# Laravel (Create, Read, Update, Delete, Middleware Login, API Route, ORM Eloquent) <img src="https://github.com/user-attachments/assets/e4b7a64d-8302-495b-b44d-93d9d0f4b2a4" width="55" height="35" />  <img src="https://github.com/user-attachments/assets/958dab41-1a1f-4f53-afef-43e2d5a6740c" width="40" height="40" />
 
 ## ➡️ Requisitos.
 - **PHP** 8.2 ou superior
@@ -12,6 +12,10 @@
 - **Execute o comando:**
 ```shell
 php artisan migrate
+```
+- Cadastre os **Seeders**
+```shell
+php artisan db:seed
 ```
 - **Execute o php:**
 ```shell
@@ -59,6 +63,74 @@ Crie o projeto usando o composer:
 composer create-project laravel/laravel .
 ```
 
+## ➡️ Trabalhando com **Authentication** e **Middleware**.
+- Travando rotas só para **authenticated**
+```php
+Route::group(['middleware' => 'auth'], function(){
+    // Routes
+}
+```
+- Configurando a **Controller**
+```php
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+
+public function loginProcess(LoginRequest $request)
+{
+    // Validar o formulário
+    $request->validated();
+
+    // Proteção contra tentativas excessivas
+    $key = 'login-attempts:' . $request->ip();
+    if (RateLimiter::tooManyAttempts($key, 5)) {
+        return back()->with('error', 'Muitas tentativas de login. Tente novamente mais tarde.');
+    }
+
+    // Validar usuário e senha no banco de dados    
+    $authenticated = Auth::attempt(['email' => $request->email, 'password' => $request->password]);
+
+    if(!$authenticated){
+        // Erro ao conseguir logar no sistema
+        return back()->withInput()->with('error', 'E-mail ou Senha inválida');
+    }
+
+    // Obter usuário autenticado
+    // $user = Auth::user();
+    // $user = User::find($user->id);
+    
+    // Regeneração da sessão para segurança
+    $request->session()->regenerate();
+    // Direcionar para o dashboard
+    return redirect()->route('user.index');
+}
+public function destroy()
+{
+    // Destruindo a SESSION 
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect()->route('login')->with('success', 'Deslogado com sucesso!');
+}
+```
+
+## ➡️ Recuperando dados da  **Session** da **View**.
+```php
+<p>Olá, {{ auth()->user()->name }}!</p>
+```
+
+## ➡️ Criando proteção contra **Brute Force**.
+- Proteção contra tentativas de login excessivas, usando o **throttle**.
+```php
+use Illuminate\Support\Facades\RateLimiter;
+$key = 'login-attempts:' . $request->ip();
+
+if (RateLimiter::tooManyAttempts($key, 5)) {
+    return back()->with('error', 'Muitas tentativas de login. Tente novamente mais tarde.');
+}
+RateLimiter::hit($key, 60); // Permite 5 tentativas por minuto
+
+```
 ## ➡️ Trabalhando com **Rotas**.
 - Vamos começar com rotas **web**
 * Rota para exibir uma **view**
@@ -86,6 +158,95 @@ Route::get('/show-user/{user}', [UserController::class, 'show'])->name('user.sho
 ```php
 Route::put('/update-user/{user}', [UserController::class, 'update'])->name('user-update');
 Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+```
+
+## ➡️ Trabalhando com **Models** - (**ORM Eloquent**).
+* Criando uma **Model**
+```shell
+php artisan make:model Flight 
+```
+
+* Vamos definir o nome da tabela, e sua chave primaria:
+
+```php
+/**
+ * A tabela associada ao modelo.
+ *
+ * @var string
+ */
+protected $table = 'my_flights';    
+protected $primaryKey = 'flight_id';
+
+    /**
+ * Indica se o ID do modelo é de incremento automático.
+ *
+ * @var bool
+ */
+public $incrementing = true;
+
+/**
+ * O tipo de dados do ID da chave primária.
+ *
+ * @var string
+ */
+protected $keyType = 'string';
+
+/**
+ * Indica se o modelo deve ter registro de data e hora..
+ *
+ * @var bool
+ */
+public $timestamps = false;
+
+    /**
+     * Conexão de banco de dados que deve ser usada pelo modelo.
+     *
+     * @var string
+     */
+    protected $connection = 'mysql';
+
+```
+
+
+* Exemplos de **SELECT**
+
+```php
+$flights = Flight::where('active', 1)
+               ->orderBy('name')
+               ->take(10)
+               ->get();
+            
+
+```
+- Se você já tiver uma instância de um modelo Eloquent que foi recuperado do banco de dados, você pode "atualizar" o modelo usando o fresh E a refresh de métodos. O que é fresh O método irá re-recuperar o modelo a partir do banco de dados. A instância do modelo existente não será afetada:
+```php
+$flight = Flight::where('number', 'FR 900')->first();
+$freshFlight = $flight->fresh();
+```
+* O que é refresh O método irá reidratar o modelo existente usando novos dados do banco de dados. Além disso, todas as suas relações carregadas serão atualizadas também:
+```php
+$flight = Flight::where('number', 'FR 900')->first();
+$flight->number = 'FR 456';
+$flight->refresh();
+$flight->number; // "FR 900"
+```
+```php
+// Select com condições
+$test = Produtos::select(
+    'id', 
+    'nome', 
+    'preco', 
+    'quantidade', 
+    'categoria',
+    DB::raw('ROUND(preco * 1.1, 2) AS preco_com_imposto'),
+    DB::raw('LENGTH(descricao) AS tamanho_descricao')
+)
+->where('preco', '>', 1000)
+->whereBetween('quantidade', [5, 20])
+->whereIn('categoria', ['Eletrônicos', 'Móveis'])
+->orderBy('preco', 'DESC')
+->limit(3)
+->get();
 ```
 
 ## ➡️ Criando **arquivos** para o projeto.

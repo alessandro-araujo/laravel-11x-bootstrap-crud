@@ -1,6 +1,14 @@
 
 @extends('layouts.auth')
 @section('content')
+
+@if (auth()->check())
+    <script>
+        window.location.href = "{{ route('user.index') }}";
+    </script>
+@endif
+
+
 <h3 class="text-center mb-4">Login</h3>
 <x-alert />
 <form action="{{ route('login.process') }}" method="POST">

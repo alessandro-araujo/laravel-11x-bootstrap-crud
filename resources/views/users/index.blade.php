@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 @section('content')
+<p>Olá, {{ auth()->user()->name }}!</p>
+
     <div class="card mt-4 mb-4 border-light shadow">
 
         <div class="card-header hstack gap-2">
@@ -9,7 +11,7 @@
                 <a href="{{ route('user.create') }}" class="btn btn-success btn-sm">Cadastrar</a>
             </span>
         </div>
-
+        
         <div class="card-body">
 
             <x-alert />

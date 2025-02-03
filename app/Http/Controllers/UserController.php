@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Database\QueryException;
+use App\Models\Products;
+use Illuminate\Support\Facades\DB;
+
 
 class UserController extends Controller
 {
@@ -14,6 +17,30 @@ class UserController extends Controller
         $users = User::orderByDesc('id')->get();
         // Carregar a VIEW
         return view('users.index', ['users' => $users]);
+    }
+
+    public function test()
+    {
+        // Select ALL
+        # $test = Products::get();
+
+        // Select com condições
+        $test = Products::select(
+            'id', 
+            'name', 
+            'price', 
+            'qtd', 
+            'category',
+            DB::raw('ROUND(price * 1.1, 2) AS preco_com_imposto'),
+            DB::raw('LENGTH(description) AS tamanho_descricao')
+        )
+        ->where('price', '>', 1000)
+        ->whereBetween('qtd', [5, 20])
+        ->whereIn('category', ['Eletrônicos', 'Móveis']) 
+        ->orderBy('preco_com_imposto', 'DESC')  
+        ->limit(3)
+        ->get();
+        return view('users.test', ['test' => $test]);
     }
 
     public function show(User $user)

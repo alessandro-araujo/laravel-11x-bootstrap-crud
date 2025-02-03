@@ -17,6 +17,8 @@ Route::get('/create-user-login', [LoginController::class, 'create'])->name('logi
 Route::post('/login', [LoginController::class, 'loginProcess'])->name('login.process');
 Route::post('/create', [LoginController::class, 'store'])->name('login.store');
 
+Route::get('/test', [UserController::class, 'test'])->name('test');
+
 Route::group(['middleware' => 'auth'], function(){
     // Rotas CRUD
     Route::post('/store-user', [UserController::class, 'store'])->name('user-store');

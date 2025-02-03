@@ -29,10 +29,9 @@ php artisan migrate
 ```shell
 php artisan db:seed
 ```
-**Executando a interface do Bootstrap**
-```shell
-npm run dev
-```
+- **[Configurando o Bootstrap](#%EF%B8%8F-instalando-bootstrap-fa%C3%A7a-na-ordem) Execute todos os comandos na ordem**
+Se não **Configurar o Bootstrap** o projeto **não vai funcionar**.
+
 - **Execute o php:**
 ```shell
 php artisan serve
@@ -64,6 +63,10 @@ import 'bootstrap';
 **No arquivo** `vite.config.js`:
 ```js
 input: ['resources/sass/app.scss', 'resources/js/app.js'],
+```
+**Executando a interface do Bootstrap**
+```shell
+npm run dev
 ```
 
 ## ➡️ Criando o Projeto do **zero**.

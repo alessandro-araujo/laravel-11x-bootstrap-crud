@@ -42,11 +42,20 @@ php artisan serve
 * Usando o comando **npm** vamos instalar as dependências.
 ```shell
 npm install
+```
+```shell
 npm i --save bootstrap @popperjs/core
+```
+```shell
 npm i --save-dev sass
 ```
+**Executando a interface do Bootstrap**
+```shell
+npm run dev
+```
 
-* Vamos importar o **Bootstrap** no projeto.
+
+* Aprendendo a importar o **Bootstrap** no projeto.
 
 **No arquivo** `resources/js/bootstrap.js`:
 ```js
@@ -63,10 +72,6 @@ import 'bootstrap';
 **No arquivo** `vite.config.js`:
 ```js
 input: ['resources/sass/app.scss', 'resources/js/app.js'],
-```
-**Executando a interface do Bootstrap**
-```shell
-npm run dev
 ```
 
 ## ➡️ Criando o Projeto do **zero**.

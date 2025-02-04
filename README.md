@@ -343,6 +343,109 @@ php artisan make:test [NomeTest] --unit
 use App\Http\Controllers\UserController;
 ```
 
+## ➡️ Trabalhando com **E-mails** (**Jobs** e **Queues**).
+- Vamos enviar um e-mail de boas vindas ao sistema:
+* Criando **Mail**.
+```shell
+php artisan make:mail SendWelcomeEmail
+```
+* Crie a **Controller**: 
+```shell
+php artisan make:controller JobsController
+```
+* **JobsController**
+```php
+public function store(JobsRequest $request){
+    $request->validated();
+
+    $user = [
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => $request->password,
+    ];
+
+    try {
+        Mail::to($user['email'])->send(new SendWelcomeEmail($user));
+        return redirect()->route('jobs.index')->with('success', 'E-mail enviado com sucesso!');
+    } catch (Exception $error) {
+        return back()->withInput()->with('error', $error);
+    }
+}
+```
+* **SendWelcomeEmail**
+- Crie duas view, no seu estilo, para enviarmos.
+```php
+/**
+ * Create a new message instance.
+ * @param mixed
+ */
+public function __construct(public $user)
+{
+    //
+}
+public function content(): Content
+{
+    return new Content(
+        view: 'emails.SendWelcomeHtml',
+        text: 'emails.SendWelcomeText'
+    );
+}
+```
+
+- Usaremos o **https://mailtrap.io** como servidor de e-mail.
+- Depois do login escolha o Laravel 9+ e substitua:
+* Configurando arquivo .env
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=
+MAIL_USERNAME=
+MAIL_PASSWORD=
+```
+- Usando **Jobs e Queues**
+* Vamos criar um job
+```shell
+php artisan make:job JobSendWelcomeEmail
+```
+* Vamos agendar o **Job** em vez de mandar direto com o **Mail::to()->send()**
+```php
+JobSendWelcomeEmail::dispatch($user['email'])->onQueue('default');
+```
+No Laravel já existe a **Queue default**
+
+* **JobSendWelcomeEmail**
+```php
+/**
+ * Create a new job instance.
+ * @param array
+ */
+public function __construct(private $userArray)
+{
+    //
+}
+
+/**
+ * Execute the job.
+ * @return void 
+ */
+public function handle(): void
+{   
+    // Recuperamos o array com os dados necessarios: 
+    $requestUser = $this->userArray;
+    // Agendamos nosso pedido na tabela job
+    Mail::to($requestUser['email'])->later(now()->addMinute(), new SendWelcomeEmail($requestUser));
+    }
+```
+* Agora vamos executar uma **Queue**
+```shel
+php artisan queue:work --queue=default
+```
+### Em Projetos **REAIS**, não use o **queue:work**
+* Use o **Supersisor**
+**https://laravel.com/docs/11.x/queues#supervisor-configuration**
+* Enviar e-mail gratuito via SMTP: **login.iagente.com.br**
+
+
 ## ➡️ Trabalhando com **Views**.
 * Criar uma **View** com diretório (**diretorio/view**):
 ```shell

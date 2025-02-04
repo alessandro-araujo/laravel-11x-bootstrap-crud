@@ -1,12 +1,11 @@
-# Laravel (Create, Read, Update, Delete, Middleware Login, API Route, ORM Eloquent) <img src="https://github.com/user-attachments/assets/e4b7a64d-8302-495b-b44d-93d9d0f4b2a4" width="55" height="35" />  <img src="https://github.com/user-attachments/assets/958dab41-1a1f-4f53-afef-43e2d5a6740c" width="40" height="40" />
+# Laravel (Create, Read, Update, Delete, Middleware Login, API Route, ORM Eloquent, Jobs and Queues) <img src="https://github.com/user-attachments/assets/e4b7a64d-8302-495b-b44d-93d9d0f4b2a4" width="55" height="35" />  <img src="https://github.com/user-attachments/assets/958dab41-1a1f-4f53-afef-43e2d5a6740c" width="40" height="40" />
 
 ## ➡️ Requisitos.
 - **PHP** 8.2 ou superior
 - **Composer** 2.8.5 ou superior
 - **Node.js** 20 ou superior
 - **phpMyAdmin** 5.2.1 ou superior
-
-
+- **Git** 2.47.1.windows.1 ou superior
 
 ## ➡️ Usando o projeto pela **primeira vez**.
 * Clone o repositório com o **git**
@@ -15,8 +14,9 @@ git clone https://github.com/alessandro-araujo/crud-laravel-anti-csrf.git .
 ```
 
 - **[Configurando .env](#%EF%B8%8F-configura%C3%A7%C3%B5es-do-banco-de-dados-regras-migrate) Crie o arquivo .env de .env-example**
+* Crie a **chave** (comando que define o valor **APP_KEY** no seu arquivo **.env**).
 ```env
-APP_KEY=base64:bXJ067MEjGzKDDnZe61YHAGsYbqDQTcHTDxn+DGpOPw=
+php artisan key:generate
 ```
 - **Instale as depêndencias:**
 ```shell

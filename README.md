@@ -7,6 +7,7 @@
 - **phpMyAdmin** 5.2.1 ou superior
 
 
+
 ## ➡️ Usando o projeto pela **primeira vez**.
 * Clone o repositório com o **git**
 ```shell

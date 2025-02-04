@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\JobsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 
@@ -8,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-
+// php artisan make:controller JobsController
 
 // Rotas de login
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -30,4 +31,8 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/index-user', [UserController::class, 'index'])->name('user.index');
     Route::get('/show-user/{user}', [UserController::class, 'show'])->name('user.show');
     Route::get('/create-user', [UserController::class, 'create'])->name('user.create');
+
+    // Rodas Jobs e Queues
+    Route::get('/jobs-queues', [JobsController::class, 'index'])->name('jobs.index');
+    Route::post('/create-transaction', [JobsController::class, 'store'])->name('jobs.store');
 }); 

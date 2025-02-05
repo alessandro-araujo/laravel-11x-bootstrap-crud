@@ -26,6 +26,7 @@
                     <li><a href="{{ route('user.index') }}" class="nav-link px-2 text-white">Home</a></li>
                     <li><a href="{{ route('jobs.index') }}" class="nav-link px-2 text-white">E-Mail (Jobs e Queues)</a></li>
                     <li><a href="{{ route('csv.index') }}" class="nav-link px-2 text-white">CSV (Jobs e Queues)</a></li>
+                    <li><a href="{{ route('api.index') }}" class="nav-link px-2 text-white">API</a></li>
                 </ul>
 
                 <div class="text-end">

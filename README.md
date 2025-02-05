@@ -178,6 +178,72 @@ Route::put('/update-user/{user}', [UserController::class, 'update'])->name('user
 Route::delete('/destroy-user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
 ```
 
+## ➡️ Trabalhando com **API Route**.
+* Instalando os modulos da **API**
+run all pending database migrations? yes
+```shell
+php artisan install:api
+```
+* **Rotas**
+```php
+// Acesso com auth
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+
+
+// Retornando informações direto no get
+Route::get('/user', function (Request $request) {
+    return response()->json([
+        'status' => true,
+        'message' => 'Listar Usuários'
+    ], 200);
+});
+
+Route::get('/user', [UserController::class, 'getForApi']);
+```
+* **Controller** 
+```php
+use Illuminate\Http\JsonResponse;
+
+public function getForApi(): JsonResponse
+{
+    // Pegando todos os dados
+    $users = User::all();    
+    return response()->json([
+        'status' => true,
+        'users' => $users
+    ]);
+}
+```
+* Para usar com **Paginação**
+```php
+    // Usando paginação PARAM=2 é a quantidade de itens por pagina
+    $users = User::orderBy('id', 'DESC')->paginate(1);
+```
+* o parâmetro **page=** recebe a quantidade de intes que vai ser enviado ao fronts
+- **GET** =  *http://localhost:8000/api/user?page=2*
+
+
+* Pegando apenas **1 parametro** na **API**
+- LEMBRANDO **getForApiUser(User $user)** AQUI O **LARAVEL JÁ FAZ O SELECT WHERE = ID**
+```php
+/**
+    * Vamos retornar um Json
+    * @return \Illuminate\Http\JsonResponse
+    */
+public function getForApiUser(User $user): JsonResponse
+{   
+    return response()->json([
+        'status' => true,
+        'user' => $user
+    ]);
+}
+```
+
+
+
+
 ## ➡️ Trabalhando com **Models** - (**ORM Eloquent**).
 * Criando uma **Model**
 ```shell

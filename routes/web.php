@@ -40,4 +40,7 @@ Route::group(['middleware' => 'auth'], function(){
     // Rotas Jobs e Queues para update de arquivos csv
     Route::get('/import-csv', [ImportCsvController ::class, 'index'])->name('csv.index');
     Route::post('/csv-store', [ImportCsvController ::class, 'import'])->name('csv.import');
+
+    // Explicação da API
+    Route::get('/show-api', [UserController ::class, 'indexApi'])->name('api.index');
 }); 

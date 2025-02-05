@@ -7,7 +7,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <style>
+        code {
+            display: block;
+            word-wrap: break-word;
+            max-width: 100%;
+            overflow-x: auto;
+        }
 
+    </style>
     <title>Login - Sistem</title>
 </head>
 
@@ -18,4 +26,21 @@
         </div>
     </div>
 </body>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        const copyButton = document.getElementById('copy-btn');
+        const codeContent = document.getElementById('code-content').innerText;
+
+        copyButton.addEventListener('click', () => {
+            navigator.clipboard.writeText(codeContent).then(() => {
+                copyButton.textContent = 'Copiado!';
+                setTimeout(() => {
+                    copyButton.textContent = 'Copiar';
+                }, 2000);
+            }).catch((err) => {
+                console.error('Erro ao copiar texto: ', err);
+            });
+        });
+    });
+    </script>
 </html>

@@ -445,6 +445,183 @@ php artisan queue:work --queue=default
 **https://laravel.com/docs/11.x/queues#supervisor-configuration**
 * Enviar e-mail gratuito via SMTP: **login.iagente.com.br**
 
+## ➡️ Importando **CSV** com **Jobs e Queues**.
+* Vamos criar os **arquivos** e instalar a **lib do csv**
+```shell
+composer require league/csv:^9.21.0
+```
+* Definir que, se um job falhar, o Laravel deve esperar 90 segundos antes de tentar executá-lo novamente.
+```env
+QUEUE_RETRY_AFTER=90 
+```
+- **Controller**
+```shell
+php artisan make:controller ImportCsvController
+```
+* Codigo:
+```php
+// Importar os dados do Excel
+public function import(CsvRequest $request)
+{
+    // Validar o arquivo
+    $request->validated();
+
+    // Gerar um nome de arquivo baseado na data e hora atual
+    $timestamp = now()->format('Y-m-d-H-i-s');
+    $filename = "import-{$timestamp}.csv";
+
+    // Receber o arquivo e movê-lo para um local temporário
+    $path = $request->file('file')->storeAs('uploads', $filename);
+
+    // Despachar o Job para processar o CSV
+    ImportCsvJob::dispatch($path)->onQueue('import_csv');
+    // Redirecionar o usuário para a página anterior e enviar a mensagem de sucesso
+    return back()->with('success', 'Dados estão sendo importados.');
+}
+```
+- **Request** (Validações)
+```shell
+php artisan make:request CsvRequest
+```
+* Codigo:
+```php
+/**
+ * Determine if the user is authorized to make this request.
+ */
+public function authorize(): bool
+{
+    return true;
+}
+
+/**
+ * Get the validation rules that apply to the request.
+ *
+ * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+ */
+public function rules(): array
+{
+    return [
+        'file' => 'required|mimes:csv,txt|max:8192', // 8 MB
+    ];
+}
+public function messages(): array
+{
+    return [
+        'file.required' => 'O campo arquivo é obrigatório.',
+        'file.mimes' => 'Arquivo inválido, necessário enviar arquivo CSV.',
+        'file.max' => 'Tamanho do arquivo execede :max Mb.'
+    ];
+}
+```
+- **Job e Queue**
+```shell
+php artisan make:job ImportCsvjob
+```
+* Codigo:
+```php
+use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+protected $filePath;
+
+/**
+ * Create a new job instance.
+ */
+public function __construct($filePath)
+{
+    $this->filePath = $filePath;
+}
+
+/**
+ * Execute the job.
+ */
+public function handle(): void
+{
+    // Ler o conteúdo do arquivo com o método createFromPath sem abrir o arquivo 
+    $fullPath = $this->filePath;
+    $csv = Reader::createFromPath(storage_path('app/private/' . $fullPath), 'r');
+    
+    // Definir o delimitador como ponto e vírgula
+    $csv->setDelimiter(';');
+    // Definir a primeira linha como cabeçalho.
+    $csv->setHeaderOffset(0);
+    // Inicializar o offset para começar do início do arquivo
+    $offset = 0;
+    $limit = 100;
+
+    // Continuar processando até que todos os registros sejam lidos
+    while (true) {
+        // Definir o inicio e o fim das linhas que devem ser lidas
+        $stmt = (new Statement())->offset($offset)->limit($limit);
+        // Retorna uma coleção de arrays associativos, cada array representa uma linha do arquivo CSV com base no offset e limit definidos.
+        $records = $stmt->process($csv);
+        // Se não houver mais registros, sair do loop
+        if (count($records) === 0) {
+            break;
+        }
+
+        // Percorrer as linhas do arquivo
+        foreach ($records as $record) {
+            // Criar o array de informções do novo registro
+            $userData = [
+                'name' => $record['name'],
+                'email' => $record['email'],
+                'password' => Hash::make(Str::random(7), ['rounds' => 12])
+            ];
+
+            // Verifica se o e-mail já está cadastrado
+            if (UserCsv::where('email', $userData['email'])->exists()) {
+                // Salvar o log indicando que o e-mail já está cadastrado
+                continue;
+            }
+            // Inserir os dados no banco de dados
+            try {
+                UserCsv::create($userData);
+            } catch (Exception $error) {
+                // Log personalizado
+                Log::error('Erro ao criar usuário a partir do CSV', [
+                    'exception' => get_class($error),
+                    'message'   => $error->getMessage(),
+                    'file'      => $error->getFile(),
+                    'line'      => $error->getLine(),
+                    'data'      => $userData,
+                ]);
+            
+                // Opcional: relançar a exceção
+                throw $error;
+            }
+            
+
+            // Salvar o log indicando e-mail cadastrado com sucesso
+        }
+        // Atualizar o offset para a próxima iteração
+        $offset += $limit;
+    }
+}
+```
+
+* Vamos ler a **Queue**
+```shell
+php artisan queue:work --queue=import_csv
+```
+
+## ➡️ Criando **Paginação** e **Estilizando**.
+* Vamos criar itens com uma paginação
+```php
+// Recuperar os registros do banco de dados
+$users = UserCsv::orderBy('id', 'DESC')->paginate(40);
+// Carregar a VIEW
+return view('csv.index', ['users' => $users]);
+```
+* Vamos **estilizar**
+```shell
+php artisan vendor:publish --tag=laravel-pagination
+```
+* Carregar na **View**
+```php
+@if($users)
+    {{ $users->links('vendor.pagination.bootstrap-5') }}
+@endif
+```
 
 ## ➡️ Trabalhando com **Views**.
 * Criar uma **View** com diretório (**diretorio/view**):

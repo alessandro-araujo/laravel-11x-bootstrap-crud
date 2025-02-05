@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ImportCsvController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
@@ -32,7 +33,11 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/show-user/{user}', [UserController::class, 'show'])->name('user.show');
     Route::get('/create-user', [UserController::class, 'create'])->name('user.create');
 
-    // Rodas Jobs e Queues
+    // Rotas Jobs e Queues para envio de emails
     Route::get('/jobs-queues', [JobsController::class, 'index'])->name('jobs.index');
     Route::post('/create-transaction', [JobsController::class, 'store'])->name('jobs.store');
+
+    // Rotas Jobs e Queues para update de arquivos csv
+    Route::get('/import-csv', [ImportCsvController ::class, 'index'])->name('csv.index');
+    Route::post('/csv-store', [ImportCsvController ::class, 'import'])->name('csv.import');
 }); 

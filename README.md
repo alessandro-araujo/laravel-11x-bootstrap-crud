@@ -86,7 +86,7 @@ composer create-project laravel/laravel .
 ```php
 Route::group(['middleware' => 'auth'], function(){
     // Routes
-}
+}); 
 ```
 - Configurando a **Controller**
 ```php
